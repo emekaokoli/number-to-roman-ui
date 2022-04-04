@@ -17,12 +17,9 @@ function Search() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(
-        'https://number-to-roman-api.herokuapp.com/api/v1/roman/',
-        {
-          number: value,
-        },
-      );
+      const { data } = await axios.post('/api/v1/roman', {
+        number: value,
+      });
       setResults(data.data);
       setValue('');
       setLoading(false);
@@ -39,7 +36,6 @@ function Search() {
       }
     }
   };
-
   return (
     <Container>
       <Row className='justify-content-md-center'>
