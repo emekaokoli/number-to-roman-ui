@@ -17,7 +17,7 @@ function Search() {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post('/api/v1/romans', {
+      const { data } = await axios.post('/api/v1/roman', {
         number: value,
       });
       setResults(data.data);
