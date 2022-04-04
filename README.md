@@ -1,6 +1,7 @@
 # Number to roman converter 
 A simple interface that converts numbers to roman numerals.
 ## project directory
+```bash
 src
  ┣ components
  ┃ ┗ NavBar.jsx
@@ -19,8 +20,6 @@ or
 ### `yarn install`
 ## to run the app
 
-```bash
-
 In the project directory, you can run:
 
 ### `npm start`
@@ -30,3 +29,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes. You may also see any lint errors in the console.
 
+live project: [https://number-to-roman-ui.herokuapp.com/](https://number-to-roman-ui.herokuapp.com/)
+
+```
