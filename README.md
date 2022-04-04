@@ -1,4 +1,4 @@
-# Number to roman converter frontend 
+# Number to roman converter 
 A simple interface that converts numbers to roman numerals.
 ## project directory
 src
