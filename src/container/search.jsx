@@ -25,9 +25,7 @@ function Search() {
         onopen(res) {
           if (
             // eslint-disable-linebreak-line no-undef
-            res.ok
-            && res.headers.get('content-type')
-            === 'text/event-stream'
+            res.ok && res.headers.get('content-type') === 'text/event-stream'
           ) {
             setLoading(true);
           } else {
