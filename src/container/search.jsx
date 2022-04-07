@@ -1,43 +1,58 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { Col, Container, Form, Row } from 'reactstrap';
 
 function Search() {
   const [value, setValue] = useState('');
-  const [results, setResults] = useState('');
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const temp = [];
 
   const disabled = value.length === 0;
-
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    try {
-      const { data } = await axios.post(
-        'https://number-to-roman-api.herokuapp.com/api/v1/roman',
-        {
-          number: value,
+    await fetchEventSource(
+      `http://localhost:1337/api/v1/roman?number=${value}`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'text/event-stream',
         },
-      );
-      setResults(data.data);
-      setValue('');
-      setLoading(false);
-    } catch ({ response }) {
-      if (response.status === 400) {
-        const { message } = response.data;
-        setResults(message);
-        setLoading(false);
-        setValue('');
-      } else if (response.status === 404) {
-        setResults('The number is not found');
-        setLoading(false);
-        setValue('');
-      }
-    }
+        onopen(res) {
+          if (
+            // eslint-disable-linebreak-line no-undef
+            res.ok
+            && res.headers.get('content-type')
+            === 'text/event-stream'
+          ) {
+            setLoading(true);
+          } else {
+            temp.push({ romanNumber: res.statusText, id: res.status });
+            setResults([...temp]);
+            setValue('');
+          }
+        },
+        onmessage(event) {
+          const parsedData = JSON.parse(event.data);
+          temp.push(parsedData);
+          setResults([...temp]);
+          setValue('');
+          setLoading(false);
+        },
+        onclose() {
+          return 'Connection closed';
+        },
+        onerror(err) {
+          if (err instanceof Error) {
+            throw err;
+          }
+        },
+      },
+    );
   };
   return (
     <Container>
@@ -60,10 +75,14 @@ function Search() {
               Get
             </button>
           </Form>
-          {loading === true && results === '' ? (
+          {loading === true && results === [] ? (
             <div>Loading...</div>
           ) : (
-            <div>{results}</div>
+            <div>
+              {results?.map(({ id, romanNumber }) => (
+                <p key={id}>{romanNumber}</p>
+              ))}
+            </div>
           )}
         </Col>
       </Row>

@@ -22,5 +22,14 @@ module.exports = {
     'no-unused-vars': 'warn',
     'no-undef': 1,
     'object-curly-newline': 'off',
+    'operator-linebreak': [
+      'error',
+      'after',
+      {
+        overrides: {
+          ':': 'before',
+        },
+      },
+    ],
   },
 };
